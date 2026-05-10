@@ -35,17 +35,17 @@ public class BowlController : MonoBehaviour
 
     public void CheckForIngridient(string name)
     {
-        if (name == _currentTarget && ingridents.Count == 0)
+        if (name == _currentTarget && ingridents.Count != 0)
         {
-            GameOver();
-        }
-        else if (name == _currentTarget)
-        {
-
             _currentTarget = ingridents.Pop();
             GameObject layer = gameLayers.Pop();
             Debug.Log(layer.name);
             layer.SetActive(true);
+        } else if (name == _currentTarget && ingridents.Count == 0 && gameLayers.Count != 0)
+        {
+            GameObject layer = gameLayers.Pop();
+            layer.SetActive(true);
+            GameOver();
         }
     }
 

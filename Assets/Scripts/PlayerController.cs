@@ -53,7 +53,9 @@ public class PlayerController : MonoBehaviour
     float _shakeFactor = 0;
 
     [SerializeField]
-    private float _shakeIncrease;
+    private float _shakeIncrease;    
+    [SerializeField]
+    private float _frequency;
 
     void Start()
     {
@@ -83,12 +85,7 @@ public class PlayerController : MonoBehaviour
             anim.Play("Release");
             playerMat.color = Color.wheat;
             _shakeFactor = 0;
-        }
-
-        if (_R2Trigger.IsPressed())
-        {
-            _shakeFactor += _shakeIncrease;
-            Debug.Log("Hello");
+            _shakeIncrease = 0;
         }
 
 
@@ -138,17 +135,12 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(new Vector3(analogInput.x * Time.deltaTime * movementSpeed, 0, analogInput.y * Time.deltaTime * movementSpeed), ForceMode.Impulse);
         if (_bounds.Contains(gameObject.transform.position))
         {
-            gameObject.transform.Translate(new Vector3(analogInput.x * Time.deltaTime * movementSpeed, 0, analogInput.y * Time.deltaTime * movementSpeed));
+            gameObject.transform.Translate(new Vector3(analogInput.x * Time.deltaTime * movementSpeed, 0,  analogInput.y * Time.deltaTime * movementSpeed));
+            gameObject.transform.Translate(new Vector3((float)Math.Cos(Time.time * _frequency) * Time.deltaTime , 0, (float)Math.Sin(Time.time * _frequency) * Time.deltaTime));
         }
         else
         {
             gameObject.transform.position = _bounds.ClosestPoint(gameObject.transform.position);
-        }
-
-        if (_shakeFactor != 0)
-        {
-            gameObject.transform.Translate(new Vector3((float)Math.Sin(Math.Cos(Time.time) * _shakeFactor * Time.deltaTime), 0, (float)Math.Cos(Math.Tan(Time.time)) * _shakeFactor * Time.deltaTime));
-
         }
     }
 
